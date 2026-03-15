@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Police Dashboard - Crime Reporting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/translations.js"></script>
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: #f4f7f6;
+            color: #333;
+            display: block;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+
+        .main-content {
+            min-height: 100vh;
+        }
+
+        .notification-item {
+            border-left: 4px solid #0d6efd;
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex dashboard-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar shadow">
+            <div class="px-4 py-3 mb-4">
+                <img src="images/logo.png" alt="Logo" style="height: 40px;">
+                <h5 class="mt-2 fw-bold text-white" data-i18n="brand_name">Police Panel</h5>
+            </div>
+            <nav class="nav flex-column mb-auto">
+                <a class="nav-link active" href="#" onclick="showSection('overview')"><i class="fas fa-home"></i>
+                    <span data-i18n="nav_dashboard">Dashboard Overview</span></a>
+                <a class="nav-link" href="#" onclick="showSection('assigned')"><i class="fas fa-tasks"></i> <span
+                        data-i18n="nav_assigned_reports">Assigned
+                        Crime Reports</span></a>
+                <a class="nav-link" href="#" onclick="showSection('all')"><i class="fas fa-file-invoice"></i> <span
+                        data-i18n="nav_all_reports">All Crime
+                        Reports</span></a>
+                <a class="nav-link" href="police-map.html"><i class="fas fa-map-marker-alt"></i> <span
+                        data-i18n="nav_crime_map">Crime Location Map</span></a>
+                <a class="nav-link" href="#" onclick="showSection('notifications')"><i class="fas fa-bell"></i>
+                    <span data-i18n="nav_notifications">Notifications</span></a>
+                <a class="nav-link" href="#" onclick="showSection('profile')"><i class="fas fa-user-circle"></i>
+                    <span data-i18n="nav_profile">Profile</span></a>
+            </nav>
+            <div class="px-4 py-4 mt-auto">
+                <button class="btn btn-outline-danger w-100 rounded-pill" onclick="logout()"><i
+                        class="fas fa-sign-out-alt"></i> <span data-i18n="nav_logout">Logout</span></button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content flex-grow-1">
+            <div id="alert" class="alert d-none"></div>
+
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="sectionTitle" class="fw-bold" data-i18n="nav_dashboard">Dashboard Overview</h2>
+                <div class="dropdown">
+                    <button class="btn btn-white shadow-sm dropdown-toggle rounded-pill px-3" type="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-user-shield me-2 text-primary"></i> <span id="officerName">Officer Name</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                        <li><a class="dropdown-item" href="#" onclick="showSection('profile')">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overviewSection">
+                <div class="row g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-white h-100">
+                            <div class="card-body">
+                                <div>
+                                    <h6 class="text-muted mb-1" data-i18n="stat_total">Total Cases</h6>
+                                    <h2 class="fw-bold mb-0" id="statTotal">0</h2>
+                                </div>
+                                <i class="fas fa-folder-open icon text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-white h-100">
+                            <div class="card-body">
+                                <div>
+                                    <h6 class="text-muted mb-1" data-i18n="status_pending">Pending</h6>
+                                    <h2 class="fw-bold mb-0 text-warning" id="statPending">0</h2>
+                                </div>
+                                <i class="fas fa-clock icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-white h-100">
+                            <div class="card-body">
+                                <div>
+                                    <h6 class="text-muted mb-1" data-i18n="status_investigating">Investigating</h6>
+                                    <h2 class="fw-bold mb-0 text-info" id="statInvestigating">0</h2>
+                                </div>
+                                <i class="fas fa-search icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card bg-white h-100">
+                            <div class="card-body">
+                                <div>
+                                    <h6 class="text-muted mb-1" data-i18n="status_closed">Closed</h6>
+                                    <h2 class="fw-bold mb-0 text-success" id="statClosed">0</h2>
+                                </div>
+                                <i class="fas fa-check-circle icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-chart-line me-2 text-primary"></i>Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted text-center py-5">Activity feed coming soon...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cases Section -->
+            <section id="casesSection" class="d-none">
+                <div id="reportsList" class="row g-4"></div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" class="d-none">
+                <div class="card shadow-sm border-0" style="max-width: 600px;">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-user-shield text-primary" style="font-size: 5rem;"></i>
+                        </div>
+                        <h3 id="profileUsername" class="fw-bold">Officer Name</h3>
+                        <p id="profileEmail" class="text-muted">officer@example.com</p>
+                        <hr>
+                        <div class="row text-start mt-4">
+                            <div class="col-6 mb-3">
+                                <label class="small text-muted d-block">Role</label>
+                                <span class="badge bg-primary">Police Officer</span>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="small text-muted d-block">Department</label>
+                                <span>Cyber Crime Unit</span>
+                            </div>
+                            <div class="col-6">
+                                <label class="small text-muted d-block">ID Number</label>
+                                <span>POL-99231</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section id="notificationsSection" class="d-none">
+                <div class="notification-item">
+                    <h6 class="fw-bold mb-1">New Case Assigned</h6>
+                    <small class="text-muted">A new theft case has been assigned to you. Check your assigned
+                        reports.</small>
+                </div>
+                <div class="notification-item">
+                    <h6 class="fw-bold mb-1">Status Update Requested</h6>
+                    <small class="text-muted">Admin requested an update for Case #102.</small>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Update Status & Notes Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold" data-i18n="action_update_status">Update Case Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="editId">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" data-i18n="report_status">Investigation Status</label>
+                        <select id="editStatus" class="form-select">
+                            <option value="Pending" data-i18n="status_pending">Pending</option>
+                            <option value="Under Investigation" data-i18n="status_investigating">Under Investigation
+                            </option>
+                            <option value="Closed" data-i18n="status_closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Investigation Notes / Remarks</label>
+                        <textarea id="editRemarks" class="form-control" rows="4" data-i18n="report_remarks_placeholder"
+                            placeholder="Add investigation remarks, evidence details, or progress updates..."></textarea>
+                    </div>
+                    <button onclick="saveUpdate()" class="btn btn-primary w-100 py-2 fs-5" data-i18n="action_save">Save
+                        Progress</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        checkAuth();
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user.role !== 'police' && user.role !== 'admin') {
+            alert('Access Denied: Police Only');
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('officerName').textContent = user.username;
+        document.getElementById('profileUsername').textContent = user.username;
+        document.getElementById('profileEmail').textContent = user.email;
+
+        const showSection = (section) => {
+            const sections = ['overview', 'cases', 'profile', 'notifications'];
+            sections.forEach(s => document.getElementById(s + 'Section').classList.add('d-none'));
+
+            // Adjust title and active link
+            const links = document.querySelectorAll('.sidebar .nav-link');
+            links.forEach(l => l.classList.remove('active'));
+
+            const sectionTitle = document.getElementById('sectionTitle');
+
+            if (section === 'overview') {
+                document.getElementById('overviewSection').classList.remove('d-none');
+                sectionTitle.setAttribute('data-i18n', 'nav_dashboard');
+                sectionTitle.textContent = i18n.t('nav_dashboard');
+                links[0].classList.add('active');
+                loadStats();
+            } else if (section === 'assigned' || section === 'all') {
+                document.getElementById('casesSection').classList.remove('d-none');
+                const titleKey = section === 'assigned' ? 'nav_assigned_reports' : 'nav_all_reports';
+                sectionTitle.setAttribute('data-i18n', titleKey);
+                sectionTitle.textContent = i18n.t(titleKey);
+
+                // Find correct link
+                links.forEach(l => {
+                    const lText = l.getAttribute('data-i18n') || l.querySelector('span')?.getAttribute('data-i18n');
+                    if (section === 'assigned' && lText === 'nav_assigned_reports') l.classList.add('active');
+                    if (section === 'all' && lText === 'nav_all_reports') l.classList.add('active');
+                });
+
+                loadReports(section === 'assigned');
+            } else if (section === 'profile') {
+                document.getElementById('profileSection').classList.remove('d-none');
+                sectionTitle.setAttribute('data-i18n', 'nav_profile');
+                sectionTitle.textContent = i18n.t('nav_profile');
+                links.forEach(l => {
+                    const lText = l.getAttribute('data-i18n') || l.querySelector('span')?.getAttribute('data-i18n');
+                    if (lText === 'nav_profile') l.classList.add('active');
+                });
+            } else if (section === 'notifications') {
+                document.getElementById('notificationsSection').classList.remove('d-none');
+                sectionTitle.setAttribute('data-i18n', 'nav_notifications');
+                sectionTitle.textContent = i18n.t('nav_notifications');
+                links.forEach(l => {
+                    const lText = l.getAttribute('data-i18n') || l.querySelector('span')?.getAttribute('data-i18n');
+                    if (lText === 'nav_notifications') l.classList.add('active');
+                });
+            }
+        };
+
+        const loadStats = async () => {
+            const res = await apiFetch('/crime/stats');
+            const data = await res.json();
+            document.getElementById('statTotal').textContent = data.total;
+            document.getElementById('statPending').textContent = data.pending;
+            document.getElementById('statInvestigating').textContent = data.investigating;
+            document.getElementById('statClosed').textContent = data.closed;
+        };
+
+        const loadReports = async (assignedOnly = false) => {
+            let url = '/crime';
+            if (assignedOnly) url += '?assignedToMe=true';
+
+            const res = await apiFetch(url);
+            const data = await res.json();
+            const list = document.getElementById('reportsList');
+            list.innerHTML = '';
+
+            if (data.length === 0) {
+                list.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">No crime reports found.</p></div>';
+                return;
+            }
+
+            data.forEach(report => {
+                let badge = 'bg-secondary';
+                let statusTextKey = 'status_pending';
+                if (report.status === 'Under Investigation') {
+                    badge = 'bg-info';
+                    statusTextKey = 'status_investigating';
+                }
+                if (report.status === 'Closed') {
+                    badge = 'bg-success';
+                    statusTextKey = 'status_closed';
+                }
+
+                const crimeTypeKey = 'crime_' + report.type.toLowerCase();
+                const crimeType = i18n.t(crimeTypeKey);
+                const statusText = i18n.t(statusTextKey);
+
+                list.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                <span class="badge ${badge} rounded-pill px-3 py-2" data-i18n="${statusTextKey}">${statusText}</span>
+                                <small class="text-muted"><i class="fas fa-id-badge me-1"></i> #${report.id}</small>
+                            </div>
+                            <div class="card-body px-3 pt-2">
+                                <h5 class="fw-bold text-dark mb-2" data-i18n="${crimeTypeKey}">${crimeType}</h5>
+                                <p class="card-text text-muted small mb-3">${report.description.substring(0, 100)}...</p>
+                                
+                                <div class="d-flex align-items-center mb-2 text-secondary small">
+                                    <i class="fas fa-map-marker-alt me-2 text-danger"></i> ${report.location}
+                                </div>
+                                <div class="d-flex align-items-center mb-3 text-secondary small">
+                                    <i class="fas fa-calendar-alt me-2 text-primary"></i> ${report.date}
+                                </div>
+                                
+                                <div class="bg-light p-2 rounded small mb-3">
+                                    <span class="d-block text-dark fw-bold" data-i18n="reporter_label">Reporter:</span>
+                                    <span class="text-muted">${report.reporter.username} (${report.reporter.email})</span>
+                                </div>
+
+                                ${report.remarks ? `
+                                <div class="alert alert-primary py-2 px-3 mb-0 small">
+                                    <strong data-i18n="notes_label">Notes:</strong> ${report.remarks}
+                                </div>` : ''}
+                            </div>
+                            <div class="card-footer bg-white border-0 pb-3 px-3 d-flex justify-content-between gap-2">
+                                <button class="btn btn-sm btn-light flex-grow-1 border" onclick="viewDetails(${report.id})"><i class="fas fa-eye text-primary"></i> <span data-i18n="action_view">View</span></button>
+                                <button class="btn btn-sm btn-primary flex-grow-1" onclick="openUpdate('${report.id}', '${report.status}', '${report.remarks || ''}')">
+                                    <i class="fas fa-edit me-1"></i> <span data-i18n="action_update">Update</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+
+        function openUpdate(id, status, remarks) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editStatus').value = status;
+            document.getElementById('editRemarks').value = remarks;
+            updateModal.show();
+        }
+
+        async function saveUpdate() {
+            const id = document.getElementById('editId').value;
+            const status = document.getElementById('editStatus').value;
+            const remarks = document.getElementById('editRemarks').value;
+
+            const res = await apiFetch(`/crime/${id}`, 'PUT', { status, remarks });
+            if (res.ok) {
+                updateModal.hide();
+                // Refresh either the current list or the stats
+                if (!document.getElementById('casesSection').classList.contains('d-none')) {
+                    const isAssigned = document.getElementById('sectionTitle').textContent.includes('Assigned');
+                    loadReports(isAssigned);
+                } else {
+                    loadStats();
+                }
+            } else {
+                alert('Failed to update');
+            }
+        }
+
+        function viewDetails(id) {
+            window.location.href = `report-details.html?id=${id}`;
+        }
+
+        // Initial load
+        loadStats();
+
+        // Language selector initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('.main-content .d-flex.justify-content-between');
+            if (header) {
+                const langDropdown = document.createElement('div');
+                langDropdown.className = 'ms-3';
+                langDropdown.innerHTML = `
+                    <div class="dropdown">
+                        <button class="btn btn-white shadow-sm dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-2 text-primary"></i> <span id="current-lang-text">${i18n.getLanguageName(i18n.getCurrentLanguage())}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item lang-btn" href="#" data-lang="en">🇬🇧 English</a></li>
+                            <li><a class="dropdown-item lang-btn" href="#" data-lang="te">🇮🇳 తెలుగు</a></li>
+                            <li><a class="dropdown-item lang-btn" href="#" data-lang="hi">🇮🇳 हिंदी</a></li>
+                        </ul>
+                    </div>
+                `;
+                header.appendChild(langDropdown);
+                i18n.attachLanguageListeners();
+            }
+        });
+    </script>
+</body>
+
+</html>

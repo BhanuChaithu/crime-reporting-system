@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Reporting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/translations.js"></script>
+    <script src="js/i18n.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="images/logo.png" alt="Logo" style="height: 40px; margin-right: 10px;">
+                <span class="fs-4 fw-bold" data-i18n="brand_name">CRIME TRACKER</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto" id="nav-links">
+                    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home"></i>
+                            <span data-i18n="nav_home">Home</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="report.html?type=Theft"><i class="fas fa-mask"></i>
+                            <span data-i18n="nav_theft">Theft</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="report.html?type=Assault"><i
+                                class="fas fa-user-injured"></i> <span data-i18n="nav_assault">Assault</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="report.html?type=Cybercrime"><i
+                                class="fas fa-user-secret"></i> <span data-i18n="nav_cybercrime">Cybercrime</span></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="report.html?type=Harassment"><i
+                                class="fas fa-exclamation-triangle"></i> <span
+                                data-i18n="nav_harassment">Harassment</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="report.html?type=Other"><i
+                                class="fas fa-question-circle"></i> <span data-i18n="nav_other">Other</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html"><i class="fas fa-sign-in-alt"></i>
+                            <span data-i18n="nav_login">Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary text-white ms-2 px-3"
+                            href="register.html"><i class="fas fa-file-alt"></i> <span
+                                data-i18n="nav_report_crime">Report Crime</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1 data-i18n="home_title">Crime Reporting & Tracking System</h1>
+            <p class="lead" data-i18n="home_subtitle">Report crimes online securely and track their status.</p>
+            <a href="register.html" class="btn btn-primary btn-lg mt-3" data-i18n="home_file_complaint">File a
+                Complaint</a>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 fixed-bottom">
+        <div class="container">
+            <p class="mb-0" data-i18n="footer_copyright">&copy; 2025 Crime Reporting System. All Rights Reserved.</p>
+            <small data-i18n="footer_tagline">Designed for Safer Communities</small>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize language selector
+        document.addEventListener('DOMContentLoaded', function () {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                i18n.initLanguageSelector(navbar);
+            }
+        });
+
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            let dashboard = 'user-dashboard.html';
+            if (user.role === 'police') dashboard = 'police-dashboard.html';
+            if (user.role === 'admin') dashboard = 'admin-dashboard.html';
+
+            document.getElementById('nav-links').innerHTML = `
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i> <span data-i18n="nav_home">Home</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html?type=Theft"><i class="fas fa-mask"></i> <span data-i18n="nav_theft">Theft</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html?type=Assault"><i class="fas fa-user-injured"></i> <span data-i18n="nav_assault">Assault</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html?type=Cybercrime"><i class="fas fa-user-secret"></i> <span data-i18n="nav_cybercrime">Cybercrime</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html?type=Harassment"><i class="fas fa-exclamation-triangle"></i> <span data-i18n="nav_harassment">Harassment</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html?type=Other"><i class="fas fa-question-circle"></i> <span data-i18n="nav_other">Other</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="citizen-map.html"><i class="fas fa-map-marked-alt"></i> <span data-i18n="nav_crime_map">Crime Location Map</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="${dashboard}"><i class="fas fa-tachometer-alt"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
+                <li class="nav-item ms-2"><a class="btn btn-danger btn-sm rounded-pill px-3 shadow" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-1"></i> <span data-i18n="nav_logout">Logout</span></a></li>
+            `;
+            // Re-initialize language selector after updating nav
+            setTimeout(() => {
+                i18n.initLanguageSelector(navbar);
+                i18n.updatePageContent();
+            }, 100);
+        }
+        function logout() {
+            localStorage.clear();
+            window.location.reload();
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

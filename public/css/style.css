@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    background: linear-gradient(to right, #2c3e50, #000000);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure text inside white cards is dark */
+.card,
+.auth-card {
+    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364) !important;
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+    /* Gold */
+    letter-spacing: 1px;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #0d6efd !important;
+    /* Professional Blue */
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link i {
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover i {
+    transform: scale(1.2);
+}
+
+footer {
+    background: #0f2027 !important;
+    margin-top: auto !important;
+    border-top: 3px solid #0d6efd;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../images/banner.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 180px 0;
+    text-align: center;
+    position: relative;
+    border-bottom: 5px solid #0d6efd;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background: linear-gradient(45deg, #1e3c72, #2a5298) !important;
+    color: white !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+.bg-danger {
+    background: linear-gradient(45deg, #c0392b, #e74c3c) !important;
+}
+
+.bg-info {
+    background: linear-gradient(45deg, #2980b9, #3498db) !important;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: #0b5ed7;
+    color: white;
+}
+
+.btn-danger {
+    background: #c0392b;
+    border: none;
+}
+
+.btn-outline-danger {
+    color: #c0392b;
+    border-color: #c0392b;
+}
+
+.btn-outline-danger:hover {
+    background: #c0392b;
+    color: white;
+}
+
+/* Status Badges */
+.status-pending {
+    color: #6c757d;
+    font-weight: bold;
+}
+
+/* Grey for pending */
+.status-investigation {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.status-closed {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    border-left: 5px solid #0d6efd;
+}
+
+/* Sidebar and Main Content Layout */
+.dashboard-wrapper {
+    display: flex;
+    min-height: calc(100vh - 56px - 60px);
+    /* Adjust based on navbar and footer height */
+}
+
+.sidebar {
+    width: 260px;
+    background: #0f2027;
+    color: white;
+    padding-top: 20px;
+    flex-shrink: 0;
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: rgba(13, 110, 253, 0.2);
+    color: #0d6efd;
+    border-left: 4px solid #0d6efd;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    background: #f4f7f6;
+    color: #333;
+}
+
+.stat-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card .card-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stat-card .icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+}
+
+.nav-tabs .nav-link {
+    color: #333;
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    border-bottom: 3px solid #0d6efd;
+}
