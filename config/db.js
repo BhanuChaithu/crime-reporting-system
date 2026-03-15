@@ -10,7 +10,14 @@ const sequelize = new Sequelize(
     {
         host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
-        logging: false
+        logging: false,
+        // Automatically enable SSL if connecting to a remote database (required by Aiven, AWS, etc.)
+        dialectOptions: process.env.DB_HOST && !['localhost', '127.0.0.1'].includes(process.env.DB_HOST) ? {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        } : {}
     }
 );
 
